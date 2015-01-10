@@ -15,7 +15,8 @@ gulp.task('slim', function(){
     .pipe(slim({
       pretty: true
     }))
-    .pipe(gulp.dest("./"));
+    .pipe(gulp.dest("./"))
+    .pipe(browser.reload({stream:true}));
 });
 
 gulp.task('sass', function() {
@@ -26,9 +27,10 @@ gulp.task('sass', function() {
         compass : true
     }))
     .pipe(gulp.dest('css/')) 
-    .pipe(csso())
-    .pipe(rename('style.min.css'))
-    .pipe(gulp.dest('css/'));
+    // .pipe(csso())
+    // .pipe(rename('style.min.css'))
+    // .pipe(gulp.dest('css/'));
+    .pipe(browser.reload({stream:true}));
 });
 
 gulp.task('js', function() {
