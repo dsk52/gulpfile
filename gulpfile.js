@@ -19,14 +19,14 @@ gulp.task('slim', function(){
     .pipe(browser.reload({stream:true}));
 });
 
-gulp.task('sass', function() {
-  gulp.src('scss/**/*.scss')
-    .pipe(plumber())
-    .pipe(sass({
-        style: 'expanded',
-        compass : true
-    }))
-    .pipe(gulp.dest('css/')) 
+gulp.task('sass', function () {
+    return sass('scss/app.scss', {
+      style: 'expanded'
+    })
+    .on('error', function (err) {
+      console.error('Error!', err.message);
+   })
+    .pipe(gulp.dest('css/'))
     // .pipe(csso())
     // .pipe(rename('style.min.css'))
     // .pipe(gulp.dest('css/'));
