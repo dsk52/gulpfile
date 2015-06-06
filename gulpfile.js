@@ -3,6 +3,7 @@
 var gulp     = require('gulp');
 var slim     = require("gulp-slim");
 var sass     = require('gulp-ruby-sass');
+var coffee   = require('gulp-coffee');
 var csso     = require('gulp-csso');
 var rename   = require('gulp-rename');
 var plumber  = require('gulp-plumber');
@@ -33,6 +34,12 @@ gulp.task('sass', function () {
     .pipe(browser.reload({stream:true}));
 });
 
+gulp.task('coffee', function() {
+  gulp.src('./coffee/*.coffee')
+    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(gulp.dest('./js/'))
+});
+
 gulp.task('js', function() {
   gulp.src('js/**/*.js')
     .pipe(plumber())
@@ -53,5 +60,6 @@ gulp.task("server", function() {
 gulp.task('watch',["server"], function () {
     gulp.watch('slim/**/*.slim', ['slim']);
     gulp.watch('scss/**/*.scss', ['sass']);
+    gulp.watch('coffee/**/*.coffee', ['coffee']);
     gulp.watch('js/**/*.js', ['js']);
 });
