@@ -21,7 +21,7 @@ gulp.task('slim', function(){
 });
 
 gulp.task('sass', function () {
-    return sass('scss/app.scss', {
+    return sass('scss/', {
       style: 'expanded'
     })
     .on('error', function (err) {
