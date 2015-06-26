@@ -36,7 +36,7 @@ gulp.task('sass', function () {
 
 gulp.task('coffee', function() {
   gulp.src('./coffee/*.coffee')
-    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(coffee())
     .pipe(gulp.dest('./js/'))
 });
 
