@@ -2,6 +2,7 @@
 
 var gulp     = require('gulp');
 var slim     = require("gulp-slim");
+var jade     = require('gulp-jade');
 var sass     = require('gulp-ruby-sass');
 var coffee   = require('gulp-coffee');
 var csso     = require('gulp-csso');
@@ -18,6 +19,16 @@ gulp.task('slim', function(){
       pretty: true
     }))
     .pipe(gulp.dest("./"))
+    .pipe(browser.reload({stream:true}));
+});
+
+gulp.task('jade', function() {
+  gulp.src(['./jade/*.jade', '!./jade/_*.jade'])
+    .pipe(plumber())
+    .pipe(jade({
+      pretty: true
+    }))
+    .pipe(gulp.dest('./'))
     .pipe(browser.reload({stream:true}));
 });
 
@@ -62,6 +73,7 @@ gulp.task("server", function() {
 
 gulp.task('watch',["server"], function () {
     gulp.watch('slim/**/*.slim', ['slim']);
+    gulp.watch('jade/**/*.jade', ['jade']);
     gulp.watch('scss/**/*.scss', ['sass']);
     gulp.watch('coffee/**/*.coffee', ['coffee']);
     gulp.watch('js/**/*.js', ['js']);
