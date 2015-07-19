@@ -11,7 +11,7 @@ var uglify   = require("gulp-uglify");
 var browser  = require("browser-sync");
 
 gulp.task('slim', function(){
-  gulp.src("slim/**/*.slim")
+  gulp.src("slim/*.slim")
     .pipe(plumber())
     .pipe(slim({
       pretty: true
