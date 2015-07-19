@@ -5,6 +5,7 @@ var slim     = require("gulp-slim");
 var sass     = require('gulp-ruby-sass');
 var coffee   = require('gulp-coffee');
 var csso     = require('gulp-csso');
+var concat   = require('gulp-concat');
 var rename   = require('gulp-rename');
 var plumber  = require('gulp-plumber');
 var uglify   = require("gulp-uglify");
@@ -37,7 +38,9 @@ gulp.task('sass', function () {
 gulp.task('coffee', function() {
   gulp.src('./coffee/*.coffee')
     .pipe(coffee())
+    .pipe(concat('script.min.js'))// 結合 & rename
     .pipe(gulp.dest('./js/'))
+    .pipe(browser.reload({stream:true}));
 });
 
 gulp.task('js', function() {
