@@ -5,6 +5,7 @@ var slim     = require("gulp-slim");
 var jade     = require('gulp-jade');
 var sass     = require('gulp-ruby-sass');
 var coffee   = require('gulp-coffee');
+var autoprefixer = require('gulp-autoprefixer');
 var csso     = require('gulp-csso');
 var concat   = require('gulp-concat');
 var rename   = require('gulp-rename');
@@ -38,7 +39,11 @@ gulp.task('sass', function () {
     })
     .on('error', function (err) {
       console.error('Error!', err.message);
-   })
+    })
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
     .pipe(gulp.dest('css/'))
     // .pipe(csso())
     // .pipe(rename('style.min.css'))
