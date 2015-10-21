@@ -53,8 +53,9 @@ gulp.task('sass', function () {
 
 gulp.task('coffee', function() {
   gulp.src('./coffee/*.coffee')
-    .pipe(coffee())
+    .pipe(plumber())
     .pipe(concat('script.min.js'))// 結合 & rename
+    .pipe(coffee())
     .pipe(gulp.dest('./js/'))
     .pipe(browser.reload({stream:true}));
 });

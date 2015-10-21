@@ -17,7 +17,7 @@
 1. ファイルをダウンロード
 2. `npm install`  
   でプラグインをインストールする。  
-  package.jsonに書かれたものがインストールされる。
+  package.jsonに書かれたNodeのモジュールがインストールされる。
 3. `gulp watch`  
   でwatchタスクを走らせる
 4. 作業を開始する
