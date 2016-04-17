@@ -12,10 +12,13 @@ var rename   = require('gulp-rename');
 var plumber  = require('gulp-plumber');
 var uglify   = require("gulp-uglify");
 var browser  = require("browser-sync");
+var notify = require('gulp-notify');
 
 gulp.task('slim', function(){
   gulp.src("slim/*.slim")
-    .pipe(plumber())
+    .pipe(plumber({
+      errorHandler: notify.onError("Error: <%= error.message %>")
+    }))
     .pipe(slim({
       pretty: true
     }))
@@ -25,7 +28,9 @@ gulp.task('slim', function(){
 
 gulp.task('jade', function() {
   gulp.src(['./jade/*.jade', '!./jade/_*.jade'])
-    .pipe(plumber())
+    .pipe(plumber({
+      errorHandler: notify.onError("Error: <%= error.message %>")
+    }))
     .pipe(jade({
       pretty: true
     }))
@@ -34,12 +39,12 @@ gulp.task('jade', function() {
 });
 
 gulp.task('sass', function () {
-    return sass('scss/', {
+    return sass('scss/**/**.scss', {
       style: 'expanded'
     })
-    .on('error', function (err) {
-      console.error('Error!', err.message);
-    })
+    .pipe(plumber({
+      errorHandler: notify.onError("Error: <%= error.message %>")
+    }))
     .pipe(autoprefixer({
       browsers: ['last 2 versions'],
       cascade: false
@@ -53,7 +58,9 @@ gulp.task('sass', function () {
 
 gulp.task('coffee', function() {
   gulp.src('./coffee/*.coffee')
-    .pipe(plumber())
+    .pipe(plumber({
+      errorHandler: notify.onError("Error: <%= error.message %>")
+    }))
     .pipe(concat('script.min.js'))// 結合 & rename
     .pipe(coffee())
     .pipe(gulp.dest('./js/'))
@@ -62,7 +69,9 @@ gulp.task('coffee', function() {
 
 gulp.task('js', function() {
   gulp.src('js/**/*.js')
-    .pipe(plumber())
+    .pipe(plumber({
+      errorHandler: notify.onError("Error: <%= error.message %>")
+    }))
     .pipe(uglify())
     .pipe(rename('script.min.js'))
     .pipe(gulp.dest('js/'))
