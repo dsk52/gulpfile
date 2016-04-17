@@ -1,16 +1,21 @@
 'use strict';
 
 var gulp     = require('gulp');
+
 var slim     = require("gulp-slim");
 var jade     = require('gulp-jade');
-var sass     = require('gulp-ruby-sass');
-var coffee   = require('gulp-coffee');
+
+var sass     = require('gulp-sass');
+var bulkSass = require('gulp-sass-bulk-import');
 var autoprefixer = require('gulp-autoprefixer');
 var csso     = require('gulp-csso');
+
+var coffee   = require('gulp-coffee');
 var concat   = require('gulp-concat');
-var rename   = require('gulp-rename');
+
 var plumber  = require('gulp-plumber');
 var uglify   = require("gulp-uglify");
+
 var browser  = require("browser-sync");
 var notify = require('gulp-notify');
 
@@ -27,7 +32,10 @@ gulp.task('slim', function(){
 });
 
 gulp.task('jade', function() {
-  gulp.src(['./jade/*.jade', '!./jade/_*.jade'])
+  gulp.src([
+      './jade/*.jade',
+      '!./jade/_*.jade'
+    ])
     .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
@@ -38,21 +46,18 @@ gulp.task('jade', function() {
     .pipe(browser.reload({stream:true}));
 });
 
-gulp.task('sass', function () {
-    return sass('scss/**/**.scss', {
-      style: 'expanded'
-    })
+gulp.task('sass', function() {
+  return gulp.src([
+      './scss/**/*.scss',
+      '!./scss/**/_*.scss'
+    ])
     .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
-      cascade: false
-    }))
+    .pipe(bulkSass())
+    .pipe(sass())
+    .pipe(csso())
     .pipe(gulp.dest('css/'))
-    // .pipe(csso())
-    // .pipe(rename('style.min.css'))
-    // .pipe(gulp.dest('css/'));
     .pipe(browser.reload({stream:true}));
 });
 
@@ -61,7 +66,7 @@ gulp.task('coffee', function() {
     .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
-    .pipe(concat('script.min.js'))// 結合 & rename
+    .pipe(concat('script.min.js'))
     .pipe(coffee())
     .pipe(gulp.dest('./js/'))
     .pipe(browser.reload({stream:true}));
@@ -73,7 +78,6 @@ gulp.task('js', function() {
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
     .pipe(uglify())
-    .pipe(rename('script.min.js'))
     .pipe(gulp.dest('js/'))
     .pipe(browser.reload({stream:true}));
 });
