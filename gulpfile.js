@@ -6,6 +6,7 @@ var slim     = require("gulp-slim");
 var jade     = require('gulp-jade');
 
 var sass     = require('gulp-sass');
+var bourbon = require('node-bourbon');
 var bulkSass = require('gulp-sass-bulk-import');
 var autoprefixer = require('gulp-autoprefixer');
 var csso     = require('gulp-csso');
@@ -13,11 +14,13 @@ var csso     = require('gulp-csso');
 var coffee   = require('gulp-coffee');
 var concat   = require('gulp-concat');
 
-var plumber  = require('gulp-plumber');
 var uglify   = require("gulp-uglify");
+var plumber  = require('gulp-plumber');
 
 var browser  = require("browser-sync");
 var notify = require('gulp-notify');
+
+bourbon.with('scss/');
 
 gulp.task('slim', function(){
   gulp.src("slim/*.slim")
@@ -55,7 +58,7 @@ gulp.task('sass', function() {
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
     .pipe(bulkSass())
-    .pipe(sass())
+    .pipe(sass({includePaths: bourbon.includePaths}))
     .pipe(csso())
     .pipe(gulp.dest('css/'))
     .pipe(browser.reload({stream:true}));
