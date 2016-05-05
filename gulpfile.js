@@ -16,9 +16,11 @@ var concat   = require('gulp-concat');
 
 var uglify   = require("gulp-uglify");
 var plumber  = require('gulp-plumber');
-
+var fs = require("fs");
+var browserify = require("browserify");
 var browser  = require("browser-sync");
 var notify = require('gulp-notify');
+
 
 bourbon.with('scss/');
 
@@ -76,13 +78,10 @@ gulp.task('coffee', function() {
 });
 
 gulp.task('js', function() {
-  gulp.src('js/**/*.js')
-    .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
-    }))
-    .pipe(uglify())
-    .pipe(gulp.dest('js/'))
-    .pipe(browser.reload({stream:true}));
+  browserify("./js/script.js") // entry point
+    .transform("babelify", {presets: ["es2015"]})
+    .bundle()
+    .pipe(fs.createWriteStream("./js/bundle.js"))
 });
 
 gulp.task("server", function() {
