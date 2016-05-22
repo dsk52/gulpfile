@@ -21,25 +21,27 @@ var browserify = require("browserify");
 var browser  = require("browser-sync");
 var notify = require('gulp-notify');
 
-
 bourbon.with('scss/');
 
-gulp.task('slim', function(){
-  gulp.src("slim/*.slim")
-    .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
-    }))
-    .pipe(slim({
-      pretty: true
-    }))
-    .pipe(gulp.dest("./"))
-    .pipe(browser.reload({stream:true}));
-});
+var source = {
+  root: 'source/',
+  jade: 'source/assets/jade/',
+  scss: 'source/assets/scss/',
+  coffee: 'source/assets/coffee/',
+  js: 'source/assets/js/'
+};
+
+var dest = {
+  root: 'dest/',
+  jade: 'dest/jade/',
+  css: 'dest/css/',
+  js: 'dest/js/',
+};
 
 gulp.task('jade', function() {
   gulp.src([
-      './jade/*.jade',
-      '!./jade/_*.jade'
+      source.jade + '**/*.jade',
+      '!' + source.jade + '**/_*.jade'
     ])
     .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
@@ -47,14 +49,14 @@ gulp.task('jade', function() {
     .pipe(jade({
       pretty: true
     }))
-    .pipe(gulp.dest('./'))
+    .pipe(gulp.dest(dest.jade))
     .pipe(browser.reload({stream:true}));
 });
 
 gulp.task('sass', function() {
   return gulp.src([
-      './scss/**/*.scss',
-      '!./scss/**/_*.scss'
+      source.scss + '**/*.scss',
+      '!' + source.scss + '**/_*.scss'
     ])
     .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
@@ -62,26 +64,29 @@ gulp.task('sass', function() {
     .pipe(bulkSass())
     .pipe(sass({includePaths: bourbon.includePaths}))
     .pipe(csso())
-    .pipe(gulp.dest('css/'))
+    .pipe(gulp.dest(dest.css))
     .pipe(browser.reload({stream:true}));
 });
 
 gulp.task('coffee', function() {
-  gulp.src('./coffee/*.coffee')
+  gulp.src([
+    source.coffee + '**/*.coffee',
+    '!' + source.coffee + '**/_*.coffee'
+    ])
     .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
     .pipe(concat('script.min.js'))
     .pipe(coffee())
-    .pipe(gulp.dest('./js/'))
+    .pipe(gulp.dest(dest.js))
     .pipe(browser.reload({stream:true}));
 });
 
 gulp.task('js', function() {
-  browserify("./js/script.js") // entry point
+  browserify(source.js + "script.js") // entry point
     .transform("babelify", {presets: ["es2015"]})
     .bundle()
-    .pipe(fs.createWriteStream("./js/bundle.js"))
+    .pipe(fs.createWriteStream(dest.js))
 });
 
 gulp.task("server", function() {
