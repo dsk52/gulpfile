@@ -1,1 +1,2 @@
-var odds = evens.map(v => v + 1);
+import bundle from './bundle.js';
+bundle();
